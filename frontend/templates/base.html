@@ -1,4 +1,5 @@
 {% load static %}
+{% load active_link_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,11 +118,14 @@
 				</ul>
 
 				<ul class="main-menu-m">
+                    {% with url_name=request.reslover_match.url_name %}
 							<li class="main-menu-active">
-							<a href="{% url 'category' 2 %}"  >Ўзбекистон</a>
+							
+                                <a href="{% url 'category' 2 %}"  >Ўзбекистон</a>
 							</li>
-							<li>
-								<a href="{% url 'category' 3 %}">Жаҳон</a>
+							<li class="main-menu-active">
+							
+                                <a href="{% url 'category' 3 %}">Жаҳон</a>
 							</li>
 							<li>
 								<a href="{% url 'category' 4 %}">Иқтисод</a>
@@ -138,7 +142,7 @@
 							<li>
 								<a href="{% url 'category' 8 %}">Таҳлил</a>
 							</li>
-                            				
+                            		{% endwith %}		
 				</ul>
 			</div>
 			
@@ -168,12 +172,14 @@
 						</a>
 
 						<ul class="main-menu justify-content-center">
-							<li >
-								<a href="{% url 'category' 2 %}"  >
+                            
+							<li  >
+								<a href="{% url 'category' 2 %}"  class="main-menu-active">
 									Ўзбекистон</a>
 							</li>
-							<li>
-								<a href="{% url 'category' 3 %}">Жаҳон</a>
+                            {% url 'category/3/' as url %}
+							<li class="{% if request.path == url %} main-menu-active {% endif %}">
+								<a href="{% url 'category' 3 %}" >Жаҳон</a>
 							</li>
 							<li>
 								<a href="{% url 'category' 4 %}">Иқтисод</a>

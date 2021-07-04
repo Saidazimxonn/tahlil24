@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.http import request
-from .models import Category, Tag, Posts, Author
+from .models import Category, Tag, Posts, Author, IpModel
+from django import forms
 # Register your models here.
 
 
@@ -10,6 +11,15 @@ from .models import Category, Tag, Posts, Author
     
 #     model= Posts
 #     extra = 0
+from ckeditor_uploader.widgets import CKEditorUploadingWidget 
+
+class PostAdminForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorUploadingWidget())
+    content_mini = forms.CharField(widget=CKEditorUploadingWidget())
+    
+    class Meta:
+        model = Posts
+        fields = '__all__'
 
 
 @admin.register(Category)
@@ -27,6 +37,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Posts)
 class PostsAdmin(admin.ModelAdmin):
+    form = PostAdminForm
     list_display = ['id', 'category', 'user', 'title']
     list_filter = ['category', 'add_time']
     
@@ -52,4 +63,9 @@ class PostsAdmin(admin.ModelAdmin):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(IpModel)
+class IpModelAdmin(admin.ModelAdmin):
     pass

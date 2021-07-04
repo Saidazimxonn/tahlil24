@@ -13,15 +13,22 @@
 								<div class="size-w-6 w-full-sr575">
 									<!-- Item post -->	
 									<div class="m-b-30">
-										<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-											<img src="{{ first_post.image.url }}" alt="IMG">
-										</a>
-
+										<form action="{% url 'blog_detail' first_post.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ first_post.id }}">
+											<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ first_post.image.url }}" alt="IMG"></button>
+										</form>
+										
 										<div class="p-t-25">
 											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-													{{ first_post.title }}
-												</a>
+
+												<form action="{% url 'blog_detail' first_post.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ first_post.id }}">
+														<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+																{{ first_post.title|safe }}
+														</button>
+												</form>
+											
+												
 											</h5>
 
 											<span class="cl8">
@@ -39,7 +46,7 @@
 											</span>
 
 											<p class="f1-s-1 cl6 p-t-18">
-												{{first_post.content_mini}}
+												{{first_post.content_mini|safe}}
 											</p>
 										</div>
 									</div>
@@ -49,15 +56,19 @@
 									<!-- Item post -->	
 									{% for post in two_post %}
 									<div class="m-b-30">
-										<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-											<img src="{{ post.image.url }}" alt="IMG">
-										</a>
+										<form action="{% url 'blog_detail' post.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ post.id }}">
+											<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ post.image.url }}" alt="IMG"></button>
+										</form>
 
 										<div class="p-t-10">
 											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													{{post.title}}
-												</a>
+												<form action="{% url 'blog_detail' post.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ post.id }}">
+														<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+																{{ post.title|safe }}
+														</button>
+												</form>
 											</h5>
 
 											<span class="cl8">

@@ -1,6 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
+
+class IpModel(models.Model):
+    ip = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.ip
+    
+
 class Category(models.Model):
     title = models.CharField(verbose_name='Category', max_length=255)
     
@@ -30,12 +39,13 @@ class Posts(models.Model):
     image = models.ImageField(verbose_name='Image')
     content_mini = models.CharField(verbose_name='Content post mini', max_length=150)
     
-    content = models.TextField(verbose_name='Content post')
-    views_post = models.IntegerField(verbose_name='View post')  
+    content = RichTextUploadingField(verbose_name='Content post')
+    views_post = models.ManyToManyField(IpModel, related_name='post_view', blank=True)  
     add_time = models.DateTimeField(verbose_name='Add post',
                                     auto_now_add=True)
-    tags = models.ManyToManyField('Tag', related_name='tag',
+    tags = models.ManyToManyField('Tag',
                                   verbose_name='Tag', blank=True)
+    
     
     class Meta:
         verbose_name = 'Post'
@@ -44,7 +54,11 @@ class Posts(models.Model):
         
     def __str__(self):
         return self.title
-
+    
+    def total_views(self):
+        return self.views_post.count()
+    
+    
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     full_name = models.CharField(verbose_name='Full name', max_length=255)

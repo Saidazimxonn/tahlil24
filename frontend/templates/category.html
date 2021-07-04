@@ -22,15 +22,21 @@
 						<div class="col-sm-6 p-r-25 p-r-15-sr991">
 							<!-- Item latest -->	
 							<div class="m-b-45">
-								<a href="" class="wrap-pic-w hov1 trans-03">
-									<img src="{{category.image.url}}" alt="IMG">
-								</a>
+								<form action="{% url 'blog_detail' category.id %}" method="get" >
+									<input type="hidden" name="post-id" value="{{ category.id }}">
+									<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ category.image.url }}" alt="IMG"></button>
+								</form>
+							
 
 								<div class="p-t-16">
 									<h5 class="p-b-5">
-										<a href="blog-detail-01.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-											{{category.content_mini}}
-										</a>
+										<form action="{% url 'blog_detail' category.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ category.id }}">
+												<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+														{{ category.title|safe }}
+												</button>
+										</form>
+									
 									</h5>
 
 									<span class="cl8">

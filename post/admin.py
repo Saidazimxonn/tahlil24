@@ -14,8 +14,8 @@ from django import forms
 from ckeditor_uploader.widgets import CKEditorUploadingWidget 
 
 class PostAdminForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorUploadingWidget())
-    content_mini = forms.CharField(widget=CKEditorUploadingWidget())
+    content = forms.CharField(widget=CKEditorUploadingWidget(), label="Asosiy xabar")
+    content_mini = forms.CharField(widget=CKEditorUploadingWidget(), label="Xabardan parcha 150 ta belgi")
     
     class Meta:
         model = Posts
@@ -39,7 +39,9 @@ class TagAdmin(admin.ModelAdmin):
 class PostsAdmin(admin.ModelAdmin):
     form = PostAdminForm
     list_display = ['id', 'category', 'user', 'title']
-    list_filter = ['category', 'add_time']
+    list_filter = ['category', 'add_time','post_type']
+
+    
     
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)

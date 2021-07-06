@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from ckeditor_uploader.fields import RichTextUploadingField
+from .choices import POST_CHOICES
 # Create your models here.
 
 class IpModel(models.Model):
@@ -31,20 +32,24 @@ class Tag(models.Model):
     
     
 class Posts(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category,
+    user = models.ForeignKey(User,verbose_name='Muallif', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,verbose_name='Xabar turi',
                                  on_delete=models.CASCADE)
-    title = models.CharField(verbose_name='title',
+    title = models.CharField(verbose_name='Xabar nomi',
                              max_length=255)
-    image = models.ImageField(verbose_name='Image')
-    content_mini = models.CharField(verbose_name='Content post mini', max_length=150)
+    image = models.ImageField(verbose_name='Asosiy rasim')
+    content_mini = models.CharField(verbose_name='Xabardan kichik parcha', max_length=350)
     
-    content = RichTextUploadingField(verbose_name='Content post')
+    content = RichTextUploadingField(verbose_name='Xabar')
     views_post = models.ManyToManyField(IpModel, related_name='post_view', blank=True)  
     add_time = models.DateTimeField(verbose_name='Add post',
                                     auto_now_add=True)
     tags = models.ManyToManyField('Tag',
                                   verbose_name='Tag', blank=True)
+    post_type = models.CharField(verbose_name="Post Turi", choices=POST_CHOICES, max_length=10 ,default='Default', null=True, blank=True)
+    
+    
+    
     
     
     class Meta:
@@ -73,3 +78,10 @@ class Author(models.Model):
        
     def __str__(self):
         return self.full_name
+    
+class Email(models.Model):
+    email = models.EmailField(verbose_name='Email')
+    
+    def __str__(self):
+        return self.email
+    

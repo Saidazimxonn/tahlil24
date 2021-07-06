@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from .models import Category, IpModel, Tag, Posts, Author
-from django.views.generic import TemplateView, ListView, DetailView
-from django.http import HttpResponseRedirect
-
+from django.views.generic import TemplateView, ListView, DetailView, View
+from django.shortcuts import redirect, render
+from .helpers import create_email
 # Create your views here.
 
 class PostView(ListView):
@@ -11,16 +11,32 @@ class PostView(ListView):
     
     def get_context_data(self, **kwargs):
         category = self.request.GET.get('category', 'None')
-        print("------------------------------------",category)
         context = super(PostView, self).get_context_data(**kwargs)
         data_post = Posts.objects.all()
         auto = Author.objects.all()
-        first_post = Posts.objects.first()
-        two_post = Posts.objects.all()[1:3] 
-        context['first_post'] = first_post
-        context ['two_post'] = two_post
-        context['data_post'] = data_post
-        context['aut'] = auto
+        posts = Posts.objects.all().order_by('-add_time')
+    
+        two_post = Posts.objects.all().order_by('-add_time')[1:3] 
+        actual_post = Posts.objects.all().order_by('-views_post')[0:5]
+        current_post1 = Posts.objects.filter(post_type='ACT').order_by('-add_time').first()
+        current_post2 = Posts.objects.filter(post_type='ACT').order_by('-add_time')[1:3]
+        # current_post = Posts.objects.filter(post_type='ACT')
+        photo_posts = Posts.objects.filter(post_type='IMG').order_by('-add_time')[:4]
+        video_posts= Posts.objects.filter(post_type='VED').order_by('-add_time')[:4]
+        
+        
+    
+        context['posts'] = posts
+        context ['two_posts'] = two_post
+        # context['data_post'] = data_post
+        # context['aut'] = auto
+        context['actual'] = actual_post
+        context['current1'] = current_post1
+        context['current2'] = current_post2
+        # context['current'] = current_post
+        context['photo_posts'] = photo_posts
+        context['video_posts'] = video_posts
+        
         return context
     
 class CategoryVeiw(TemplateView):
@@ -28,9 +44,34 @@ class CategoryVeiw(TemplateView):
     
     def get_context_data(self, **kwargs):
         id_c = self.kwargs['pk']
+        actual_post = Posts.objects.all().order_by('-views_post')[0:5]
         context = super(CategoryVeiw, self).get_context_data(**kwargs)
         filter_category = Posts.objects.filter(category__id=id_c)
+        context['actual'] = actual_post
         context['filter_category'] = filter_category
+        
+        return context
+    
+class CategoryPostVeiw(TemplateView):
+    template_name = 'post_category.html'
+  
+    
+    def get_context_data(self, **kwargs):
+        id_c = self.kwargs['pk']
+    
+        context = super(CategoryPostVeiw, self).get_context_data(**kwargs)
+        actual_post = Posts.objects.all().order_by('-views_post')[0:5]
+        post_category = Posts.objects.all()        
+        if int(id_c) == int(1):
+            post_category = Posts.objects.filter(post_type='ACT')
+        if int(id_c) == int(2):
+            post_category = Posts.objects.filter(post_type='IMG')
+        if int(id_c) == int(3):
+            post_category = Posts.objects.filter(post_type='VED')
+        filter_post = post_category
+        context['number'] = id_c
+        context['actual'] = actual_post
+        context['post_category'] = filter_post
         
         return context
  
@@ -48,16 +89,21 @@ class PostDetail(DetailView):
     model = Posts
     template_name = 'blog-detail.html'
     context_object_name = 'blog'
+    def get_context_data(self, **kwargs):
+        actual_post = Posts.objects.all().order_by('-views_post')[0:3]
+        context = super(PostDetail, self).get_context_data(**kwargs)
+        context['actual'] = actual_post
+        
+        return context
+    
 
     def get(self, request, *args, **kwargs):
+        
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         ip = get_client_ip(self.request)
-        print("*****************************************************",ip)
         if IpModel.objects.filter(ip=ip).exists():
-            print('ip haqiqiqy')
             post_id = request.GET.get('post-id')
-            print(post_id)
             blog = Posts.objects.get(pk=post_id)
             blog.views_post.add(IpModel.objects.get(ip=ip))
         else:
@@ -67,3 +113,15 @@ class PostDetail(DetailView):
             blog.views_post.add(IpModel.objects.get(ip=ip))
         return self.render_to_response(context)
             
+class ActionView(View):
+    
+    def post(self, request):
+        post_request = request.POST
+        print(post_request.get('action', None))
+        actions = {
+        
+            'create_email' : create_email,
+            
+        }
+        actions[self.request.POST.get('action', None)](post_request)
+        return redirect('/')

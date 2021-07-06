@@ -12,19 +12,20 @@
 							<div class="flex-wr-sb-s p-t-35">
 								<div class="size-w-6 w-full-sr575">
 									<!-- Item post -->	
+									{% if posts %}
 									<div class="m-b-30">
-										<form action="{% url 'blog_detail' first_post.id %}" method="get" >
-											<input type="hidden" name="post-id" value="{{ first_post.id }}">
-											<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ first_post.image.url }}" alt="IMG"></button>
+										<form action="{% url 'blog_detail' posts.first.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ posts.first.id }}">
+											<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ posts.first.image.url }}" alt="IMG"></button>
 										</form>
 										
 										<div class="p-t-25">
 											<h5 class="p-b-5">
 
-												<form action="{% url 'blog_detail' first_post.id %}" method="get" >
-													<input type="hidden" name="post-id" value="{{ first_post.id }}">
+												<form action="{% url 'blog_detail' posts.first.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ posts.first.id }}">
 														<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
-																{{ first_post.title|safe }}
+																{{ posts.first.title|safe }}
 														</button>
 												</form>
 											
@@ -33,7 +34,7 @@
 
 											<span class="cl8">
 												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-													{{first_post.category}}
+													{{posts.first.category}}
 												</a>
 
 												<span class="f1-s-3 m-rl-3">
@@ -41,24 +42,29 @@
 												</span>
 
 												<span class="f1-s-3">
-													{{first_post.add_time|date:'M d'}}
+													{{posts.first.add_time|date:'M d'}}
 												</span>
 											</span>
 
 											<p class="f1-s-1 cl6 p-t-18">
-												{{first_post.content_mini|safe}}
+												{{posts.first.content_mini|safe}}
 											</p>
 										</div>
 									</div>
+									{% endif %}
 								</div>
-
-								<div class="size-w-7 w-full-sr575">
+									{% if two_posts %}
+	 							<div class="size-w-7 w-full-sr575">
 									<!-- Item post -->	
-									{% for post in two_post %}
+									{% for post in two_posts %}
+								
 									<div class="m-b-30">
+									
 										<form action="{% url 'blog_detail' post.id %}" method="get" >
 											<input type="hidden" name="post-id" value="{{ post.id }}">
-											<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ post.image.url }}" alt="IMG"></button>
+											<button class="wrap-pic-w hov1 trans-03" type="submit">
+												<img src="{{ post.image.url }}" alt="IMG">
+											</button>
 										</form>
 
 										<div class="p-t-10">
@@ -72,7 +78,7 @@
 											</h5>
 
 											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
+												<a href=" " class="f1-s-6 cl8 hov-cl10 trans-03">
 													{{post.category}}
 													{{post.user.author}}
 												</a>
@@ -87,9 +93,11 @@
 											</span>
 										</div>
 									</div>
-{% endfor %}
+								{% endfor %}
+
 								
 								</div>
+									{% endif %}
 							</div>
 						</div>
 						
@@ -101,7 +109,7 @@
 								</h3>
 
 
-								<a href="category.html" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03">
+								<a href="{% url 'post_detail' 1 %}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03">
 									Барчаси
 									<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 								</a>
@@ -109,21 +117,30 @@
 							<div class="flex-wr-sb-s p-t-35">
 								<div class="size-w-6 w-full-sr575">
 									<!-- Item post -->	
+										{% if current1 %}
 									<div class="m-b-30">
-										<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-											<img src="{% static 'images/post-10.jpg' %}" alt="IMG">
-										</a>
-
+										<form action="{% url 'blog_detail' current1.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ current1.id }}">
+												<button type="submit"class="wrap-pic-w hov1 trans-03" style="text-align:left;">
+													<img src="{{ current1.image.url }}" alt="IMG">
+												</button>
+										</form>
+									
 										<div class="p-t-25">
 											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-													Долзарб ҳабарлар бу ерда туради
-												</a>
+												<form action="{% url 'blog_detail' current1.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ current1.id }}">
+														<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+															{{current1.title}}
+														</button>
+												</form>
+										
 											</h5>
 
 											<span class="cl8">
 												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-													Таҳлил
+													{{current1.category}}
+
 												</a>
 
 												<span class="f1-s-3 m-rl-3">
@@ -131,34 +148,47 @@
 												</span>
 
 												<span class="f1-s-3">
-													Июнь 26
+													{{current1.add_time|date:'M d'}}
+
 												</span>
 											</span>
 
 											<p class="f1-s-1 cl6 p-t-18">
-												Мақоладан кисқа парча 150та ортиқ белгидан ошмаслиги лозим 
+												{{current1.content_mini|safe}}
 											</p>
 										</div>
 									</div>
+										{% endif %}
+									
 								</div>
 
 								<div class="size-w-7 w-full-sr575">
 									<!-- Item post -->	
+									{% if current2 %}
+										{% for post in current2 %}
+								
 									<div class="m-b-30">
-										<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-											<img src="{% static 'images/post-11.jpg' %}" alt="IMG">
-										</a>
-
+										<form action="{% url 'blog_detail' post.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ post.id }}">
+												<button type="submit"class="wrap-pic-w hov1 trans-03" style="text-align:left;">
+													<img src="{{ post.image.url }}" alt="IMG">
+												</button>
+										</form>
+									
 										<div class="p-t-10">
 											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Долзарб ҳабарлар бу ерда туради
-												</a>
+												<form action="{% url 'blog_detail' post.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ post.id }}">
+														<button type="submit" class="f1-s-5 cl3 hov-cl10 trans-03" style="text-align:left;">
+															{{post.title}}
+														</button>
+												</form>
+											
 											</h5>
 
 											<span class="cl8">
 												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Таҳлил
+													{{post.category}}
 												</a>
 
 												<span class="f1-s-3 m-rl-3">
@@ -166,40 +196,14 @@
 												</span>
 
 												<span class="f1-s-3">
-													Feb 17
+													{{post.add_time|date:'M d'}}
 												</span>
 											</span>
 										</div>
 									</div>
-
-									<!-- Item post -->	
-									<div class="m-b-30">
-										<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-											<img src="{% static 'images/post-24.jpg' %}" alt="IMG">
-										</a>
-
-										<div class="p-t-10">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Долзарб ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жаҳон
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Feb 16
-												</span>
-											</span>
-										</div>
-									</div>
+									
+										{% endfor %}
+									{% endif %}
 								</div>
 							</div>
 						</div>
@@ -212,59 +216,40 @@
 								</h3>
 
 
-								<a href="category-01.html" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03">
+								<a href="{% url 'post_detail' 2 %}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03">
 									Барчаси
 									<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 								</a>
 							</div>
 
-							<div class="row p-t-35">
-								<div class="col-sm-6 p-r-25 p-r-15-sr991">
+							<div class="p-t-35">
+								<div class="p-r-25 p-r-15-sr991 row">
 									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="{% static 'images/post-25.jpg' %}" alt="IMG">
-										</a>
-
-										<div class="size-w-2">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Фото ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Июнь 26
-												</span>
-											</span>
-										</div>
-									</div>
+									{% if photo_posts %}
+									{% for post in photo_posts %}
+									<div class="flex-wr-sb-s m-b-30 col-md-6">
+										<form action="{% url 'blog_detail' post.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ post.id }}">
+												<button type="submit" class="size-w-1 wrap-pic-w hov1 trans-03" style="text-align:left;">
+													<img src="{{ post.image.url }}" alt="IMG">
+												</button>
+										</form>
 									
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="{% static 'images/post-25.jpg' %}" alt="IMG">
-										</a>
 
 										<div class="size-w-2">
 											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Фото ҳабарлар бу ерда туради
-												</a>
+												<form action="{% url 'blog_detail' post.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ post.id }}">
+														<button type="submit" class="f1-s-5 cl3 hov-cl10 trans-03" style="text-align:left;">
+															{{post.title}}
+														</button>
+												</form>
+										
 											</h5>
 
 											<span class="cl8">
 												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
+													{{post.category}}
 												</a>
 
 												<span class="f1-s-3 m-rl-3">
@@ -272,71 +257,15 @@
 												</span>
 
 												<span class="f1-s-3">
-													Июнь 26
+													{{post.add_time|date:'M d'}}
 												</span>
 											</span>
 										</div>
 									</div>
+									{% endfor %}
+								{% endif %}
 								</div>
 
-								<div class="col-sm-6 p-r-25 p-r-15-sr991">
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="{% static 'images/post-25.jpg' %}" alt="IMG">
-										</a>
-
-										<div class="size-w-2">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Фото ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Июнь 26
-												</span>
-											</span>
-										</div>
-									</div>
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="images/post-25.jpg" alt="IMG">
-										</a>
-
-										<div class="size-w-2">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Фото ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Июнь 26
-												</span>
-											</span>
-										</div>
-									</div>
-								</div>
 							</div>
 						</div>
 
@@ -348,90 +277,39 @@
 								</h3>
 
 
-								<a href="category-01.html" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03">
+								<a href="{% url 'post_detail' 3 %}" class="tab01-link f1-s-1 cl9 hov-cl10 trans-03">
 									Барчаси
 									<i class="fs-12 m-l-5 fa fa-caret-right"></i>
 								</a>
 							</div>
 
-							<div class="row p-t-35">
-								<div class="col-sm-6 p-r-25 p-r-15-sr991">
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="images/post-25.jpg" alt="IMG">
-										</a>
-
-										<div class="size-w-2">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Видео ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Июнь 26
-												</span>
-											</span>
-										</div>
-									</div>
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="images/post-25.jpg" alt="IMG">
-										</a>
-
-										<div class="size-w-2">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Видео ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Июнь 26
-												</span>
-											</span>
-										</div>
-									</div>	
+							<div class="p-t-35">
+								<div class=" p-r-25 p-r-15-sr991 row">
+									<!-- Item post -->
+									{% if video_posts %}	
+									{% for post  in video_posts %}
+									<div class="flex-wr-sb-s m-b-30 col-md-6">
+										<form action="{% url 'blog_detail' post.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ post.id }}">
+												<button type="submit" class="size-w-1 wrap-pic-w hov1 trans-03" style="text-align:left;">
+													<img src="{{post.image.url}}" alt="IMG">
+												</button>
+										</form>
 									
-								</div>
-
-								<div class="col-sm-6 p-r-25 p-r-15-sr991">
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="images/post-25.jpg" alt="IMG">
-										</a>
 
 										<div class="size-w-2">
 											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Видео ҳабарлар бу ерда туради
-												</a>
+												<form action="{% url 'blog_detail' post.id %}" method="get" >
+													<input type="hidden" name="post-id" value="{{ post.id }}">
+														<button type="submit" class="f1-s-5 cl3 hov-cl10 trans-03" style="text-align:left;">
+															{{post.title}}
+														</button>
+												</form>
 											</h5>
 
 											<span class="cl8">
 												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
+													{{post.category}}
 												</a>
 
 												<span class="f1-s-3 m-rl-3">
@@ -439,40 +317,16 @@
 												</span>
 
 												<span class="f1-s-3">
-													Июнь 26
+													{{post.add_time|date:'M d'}}
 												</span>
 											</span>
 										</div>
 									</div>
-									<!-- Item post -->	
-									<div class="flex-wr-sb-s m-b-30">
-										<a href="blog-detail.html" class="size-w-1 wrap-pic-w hov1 trans-03">
-											<img src="images/post-25.jpg" alt="IMG">
-										</a>
-
-										<div class="size-w-2">
-											<h5 class="p-b-5">
-												<a href="blog-detail.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-													Видео ҳабарлар бу ерда туради
-												</a>
-											</h5>
-
-											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													Жамият
-												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
-												<span class="f1-s-3">
-													Июнь 26
-												</span>
-											</span>
-										</div>
-									</div>
+									{% endfor %}
+								{% endif %}
 								</div>
+
+							
 							</div>
 						</div>
 					</div>
@@ -489,35 +343,18 @@
 							</div>
 
 							<ul class="p-t-35">
+								{% if actual %}
+								{% for post in actual %}
 								<li class="flex-wr-sb-s p-b-22">
-									<a href="#" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03">
-										Оммабоп ҳабарлар бу ерда туради
-									</a>
+									<form action="" method="get" >
+										<input type="hidden" name="post-id" value="{{ post.id }}">
+											<button type="submit" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03" style="text-align:left;">
+													{{ post.title|safe }}
+											</button>
+									</form>
 								</li>
-
-								<li class="flex-wr-sb-s p-b-22">
-									<a href="#" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03">
-										Оммабоп ҳабарлар бу ерда туради
-									</a>
-								</li>
-
-								<li class="flex-wr-sb-s p-b-22">
-									<a href="#" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03">
-										Оммабоп ҳабарлар бу ерда туради
-									</a>
-								</li>
-
-								<li class="flex-wr-sb-s p-b-22">
-									<a href="#" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03">
-										Оммабоп ҳабарлар бу ерда туради
-									</a>
-								</li>
-
-								<li class="flex-wr-sb-s p-b-22">
-									<a href="#" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03">
-										Оммабоп ҳабарлар бу ерда туради
-									</a>
-								</li>
+									{% endfor %}
+								{% endif %}
 							</ul>
 						</div>
 
@@ -537,10 +374,14 @@
 								Кайноқ янгиликларга обуна бўлинг
 							</p>
 
-							<form class="size-a-9 pos-relative">
-								<input class="s-full f1-m-6 cl6 plh9 p-l-20 p-r-55" type="text" name="email" placeholder="Email">
+						
 
-								<button class="size-a-10 flex-c-c ab-t-r fs-16 cl9 hov-cl10 trans-03">
+							<form class="size-a-9 pos-relative" action="{% url 'action_view'%}">
+								<input type="hidden" name='action' value="create_email" >
+									{% csrf_token %}
+								<input class="s-full f1-m-6 cl6 plh9 p-l-20 p-r-55" type="email" name="email" placeholder="Email">
+
+								<button type="submit" class="size-a-10 flex-c-c ab-t-r fs-16 cl9 hov-cl10 trans-03">
 									<i class="fa fa-arrow-right"></i>
 								</button>
 							</form>
@@ -570,23 +411,34 @@
 			</div>
 
 			<div class="row p-t-35">
+				{% if posts %}
+				{% for post in posts|slice:":6" %}
 				<div class="col-sm-6 col-md-4">
 					<!-- Item latest -->	
+				
 					<div class="m-b-45">
-						<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-							<img src="images/latest-01.jpg" alt="IMG">
-						</a>
+						<form action="{% url 'blog_detail' post.id %}" method="get" >
+							<input type="hidden" name="post-id" value="{{ post.id }}">
+								<button type="submit"  class="wrap-pic-w hov1 trans-03" style="text-align:left;">
+									<img src="{{post.image.url}}" alt="IMG">
+								</button>
+						</form>
+					
 
 						<div class="p-t-16">
 							<h5 class="p-b-5">
-								<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-									Сўнги ҳабарлар бу ерда туради 
-								</a>
+								<form action="{% url 'blog_detail' post.id %}" method="get" >
+									<input type="hidden" name="post-id" value="{{ post.id }}">
+										<button type="submit"  class="wrap-pic-w hov1 trans-03" style="text-align:left;">
+											{{post.title}}
+										</button>
+								</form>
+								
 							</h5>
 
 							<span class="cl8">
 								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: Фалончи Фалончиев
+									Автор: {{post.user.first_name}} {{post.user.last_name}}
 								</a>
 
 								<span class="f1-s-3 m-rl-3">
@@ -600,156 +452,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6 col-md-4">
-					<!-- Item latest -->	
-					<div class="m-b-45">
-						<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-							<img src="images/latest-01.jpg" alt="IMG">
-						</a>
-
-						<div class="p-t-16">
-							<h5 class="p-b-5">
-								<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-									Сўнги ҳабарлар бу ерда туради 
-								</a>
-							</h5>
-
-							<span class="cl8">
-								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: Фалончи Фалончиев
-								</a>
-
-								<span class="f1-s-3 m-rl-3">
-									-
-								</span>
-
-								<span class="f1-s-3">
-									июнь 26
-								</span>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-4">
-					<!-- Item latest -->	
-					<div class="m-b-45">
-						<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-							<img src="images/latest-01.jpg" alt="IMG">
-						</a>
-
-						<div class="p-t-16">
-							<h5 class="p-b-5">
-								<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-									Сўнги ҳабарлар бу ерда туради 
-								</a>
-							</h5>
-
-							<span class="cl8">
-								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: Фалончи Фалончиев
-								</a>
-
-								<span class="f1-s-3 m-rl-3">
-									-
-								</span>
-
-								<span class="f1-s-3">
-									июнь 26
-								</span>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-4">
-					<!-- Item latest -->	
-					<div class="m-b-45">
-						<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-							<img src="images/latest-01.jpg" alt="IMG">
-						</a>
-
-						<div class="p-t-16">
-							<h5 class="p-b-5">
-								<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-									Сўнги ҳабарлар бу ерда туради 
-								</a>
-							</h5>
-
-							<span class="cl8">
-								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: Фалончи Фалончиев
-								</a>
-
-								<span class="f1-s-3 m-rl-3">
-									-
-								</span>
-
-								<span class="f1-s-3">
-									июнь 26
-								</span>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-4">
-					<!-- Item latest -->	
-					<div class="m-b-45">
-						<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-							<img src="images/latest-01.jpg" alt="IMG">
-						</a>
-
-						<div class="p-t-16">
-							<h5 class="p-b-5">
-								<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-									Сўнги ҳабарлар бу ерда туради 
-								</a>
-							</h5>
-
-							<span class="cl8">
-								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: Фалончи Фалончиев
-								</a>
-
-								<span class="f1-s-3 m-rl-3">
-									-
-								</span>
-
-								<span class="f1-s-3">
-									июнь 26
-								</span>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6 col-md-4">
-					<!-- Item latest -->	
-					<div class="m-b-45">
-						<a href="blog-detail.html" class="wrap-pic-w hov1 trans-03">
-							<img src="images/latest-01.jpg" alt="IMG">
-						</a>
-
-						<div class="p-t-16">
-							<h5 class="p-b-5">
-								<a href="blog-detail.html" class="f1-m-3 cl2 hov-cl10 trans-03">
-									Сўнги ҳабарлар бу ерда туради 
-								</a>
-							</h5>
-
-							<span class="cl8">
-								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: Фалончи Фалончиев
-								</a>
-
-								<span class="f1-s-3 m-rl-3">
-									-
-								</span>
-
-								<span class="f1-s-3">
-									июнь 26
-								</span>
-							</span>
-						</div>
-					</div>
-				</div>
+				{% endfor %}
+			{% endif %}
 			</div>
 		</div>
 	</section>

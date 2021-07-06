@@ -1,4 +1,7 @@
 POST_CHOICES = [
-    ('IMG', 'Image'),
-    ('VED', 'Vedio'),
+    ('SMP', 'Oddiy xabar'),
+    ('IMG', 'Foto xabar'),
+    ('VED', 'Video xabar'),
+    ('ACT', 'Dolzarb xabar'),
+    
 ]

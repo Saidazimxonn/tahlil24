@@ -7,7 +7,15 @@
 	<!-- Page heading -->
 	<div class="container p-t-4 p-b-40">
 		<h2 class="f1-l-1 cl2">
-			{{ filter_category.0.category}}
+				
+				{% if number == 1 %}
+				Долзарб ҳабарлар
+				{% elif number == 2 %}
+				Фото Хабарлар
+				{% elif number == 3 %}
+				Видео Хабарлар
+				{% endif %}
+
 		</h2>
 	</div>
 		
@@ -18,7 +26,7 @@
 				<div class="col-md-10 col-lg-8 p-b-80">
 					<div class="row">
 						
-						{% for category in filter_category %}
+						{% for category in post_category %}
 						<div class="col-sm-6 p-r-25 p-r-15-sr991">
 							<!-- Item latest -->	
 							<div class="m-b-45">

@@ -16,10 +16,14 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-10 col-lg-8 p-b-80">
-					<div class="row">
+					<div class="row" id="post_list">
 						
 						{% for category in filter_category %}
-						<div class="col-sm-6 p-r-25 p-r-15-sr991">
+							{% if forloop.last %}
+						<div class="col-sm-6 category p-r-25 p-r-15-sr991 last-post" data-postid="{{ category.id}}">
+							{% else %}
+						<div class="col-sm-6 category p-r-25 p-r-15-sr991">
+							{% endif %}
 							<!-- Item latest -->	
 							<div class="m-b-45">
 								<form action="{% url 'blog_detail' category.id %}" method="get" >
@@ -59,11 +63,11 @@
 					
 				
 					</div>
-
+					{% if filter_category.count >= 2 %}
 					<!-- Pagination -->
-					<a href="#" class="flex-c-c size-a-13 bo-all-1 bocl11 f1-m-6 cl6 hov-btn1 trans-03">
-							Кўпроқ
-					</a>
+				<p class="flex-c-c size-a-13 bo-all-1 bocl11 f1-m-6 cl6 hov-btn1 trans-03" id="load-more"   ><button>Кўпроқ</button> </p>
+					
+					{% endif %}
 				</div>
 
 				<div class="col-md-10 col-lg-4 p-b-80">
@@ -121,5 +125,87 @@
 			</div>
 		</div>
 	</section>
+	<script>
+		function myFunction() {
+			alert("I am an alert box!");
+		  }
+	</script>
+	
+	
+	{% block extra_js %}
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
+	{% endblock extra_js %}
+<script>
+		
+		$('#load-more').on('click', function(){
+			let  lastPostId = $('.last-post').attr('data-postid')
+			console.log(lastPostId)
+			let data = {
+				lastPostId:lastPostId,
+				categoryId: {{ category_id }}
+			}
+			$('.category').removeClass('last-post')
+			$('.category').removeAttr('data-postid')
+			$.ajax({
+				method:"GET",
+				dataType:"json",
+				data:data,
+				url:'{% url "load-more-posts" %}',
+				success:function(data){
+					let post_data = data['data']
+					let posts_template = ``;
+					for(post_index in post_data) {
+						let template;
+						if (post_data[post_index]['last_post']){
+							template = `
+							<div class="col-sm-6 category p-r-25 p-r-15-sr991 last-post" data-postid="${post_data[post_index]['id']}">
+							`
+						}
+						else {
+							template = `<div class="col-sm-6 category p-r-25 p-r-15-sr991">`
+						}
+						template += `
+								<div class="m-b-45">
+									<form action="/blog_detail/${post_data[post_index]['id']}/" method="get" >
+										<input type="hidden" name="post-id" value="${post_data[post_index]['id']}">
+										<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="/media/${post_data[post_index]['image']}" alt="IMG"></button>
+									</form>
+								
+
+									<div class="p-t-16">
+										<h5 class="p-b-5">
+											<form action="/blog_detail/${post_data[post_index]['id']}/" method="get" >
+												<input type="hidden" name="post-id" value="${post_data[post_index]['id']}">
+													<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+														${post_data[post_index]['title']}
+													</button>
+											</form>
+										
+										</h5>
+
+										<span class="cl8">
+											<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+												Автор:  	${post_data[post_index]['user.first_name']}
+											</a>
+
+											<span class="f1-s-3 m-rl-3">
+												-
+											</span>
+
+											<span class="f1-s-3">
+												${post_data[post_index]['add_time']}
+											</span>
+										</span>
+									</div>
+								</div>
+							</div>
+						`
+						posts_template += template
+					}
+					$('#post_list')[0].innerHTML += posts_template
+				}
+			})
+		})
+	</script>
 	{% endblock content %}

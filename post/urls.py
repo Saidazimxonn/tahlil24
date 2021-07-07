@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostView, CategoryVeiw, PostDetail ,CategoryPostVeiw, ActionView, PostJsonView, AboutWebSite, TagsView
+from .views import PostView, CategoryVeiw, PostDetail ,CategoryPostVeiw, ActionView, PostJsonView, AboutWebSite, TagsView, DynamicPostsLoad
 
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path('post-json/', PostJsonView.as_view(), name='post-json-view'),
     path('about-site/', AboutWebSite.as_view(), name='about-site'),
     path('tags/<slug:tag_slug>/', TagsView.as_view(), name='posts_by_tag'),
+    path('load-more-posts/', DynamicPostsLoad.as_view(), name="load-more-posts"),
     
     
 ]

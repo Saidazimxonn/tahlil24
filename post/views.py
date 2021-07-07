@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from .helpers import create_email
 from django.contrib import messages
 from taggit.models import Tag
+from django.http import JsonResponse
 # Create your views here.
 class TagMixin(object):
     def get_context_data(self, **kwargs):
@@ -51,12 +52,44 @@ class CategoryVeiw(TemplateView):
         id_c = self.kwargs['pk']
         actual_post = Posts.objects.all().order_by('-views_post')[0:5]
         context = super(CategoryVeiw, self).get_context_data(**kwargs)
-        filter_category = Posts.objects.filter(category__id=id_c)
+        print(Posts.objects.filter(category__id=id_c).values('id'))
+        filter_category = Posts.objects.filter(category__id=id_c).order_by('id')[:2]
         context['actual'] = actual_post
         context['filter_category'] = filter_category
-        
+        context['category_id'] = id_c
         return context
+class DynamicPostsLoad(View):
     
+    @staticmethod
+    def get(request, *args, **kwargs):
+        last_post_id = request.GET.get('lastPostId')
+        category_id = request.GET.get('categoryId')
+        print(last_post_id)
+        more_posts = Posts.objects.order_by('id').filter(pk__gt=int(last_post_id), category_id=category_id)\
+            .values('id', 'user', 'category', 'title', 'image', 'content_mini', 
+                    'content',  'add_time', 'post_type' )[:2]
+      
+        if not more_posts:
+            return JsonResponse({'data':False})
+        data = []
+        obj = dict()
+        print(more_posts)
+        for post in more_posts:
+            print(post['id'])
+            obj = {
+                'id':post['id'],
+                'user':post['user'],
+                'category':post['category'],
+                'title':post['title'],
+                'image':post['image'],
+                'content_mini':post['content_mini'],
+                'content':post['content'],
+                'add_time':post['add_time'],
+                'post_type':post['post_type'],
+                }
+            data.append(obj)
+        data[-1]['last_post'] = True
+        return JsonResponse({'data':data})
 class CategoryPostVeiw(TemplateView):
     template_name = 'post_category.html'
   

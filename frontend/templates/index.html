@@ -1,9 +1,17 @@
 	{% extends 'base.html' %}
 	{% load static %}
 	{% block content %}
+
 	<!-- Post -->
 	<section class="post bg0 p-t-85">
 		<div class="container">
+			{% if messages %}
+			{% for msg in messages %}
+			<div class="alert alert-primary" role="alert">
+				{{msg}}
+			  </div>
+			{% endfor %}
+			{% endif %}
 			<div class="row justify-content-center">
 				<div class="col-md-10 col-lg-8">
 					<div class="p-r-10 p-rl-0-sr991 p-b-20">
@@ -346,7 +354,7 @@
 								{% if actual %}
 								{% for post in actual %}
 								<li class="flex-wr-sb-s p-b-22">
-									<form action="" method="get" >
+									<form action="{% url 'blog_detail' post.id %}" method="get" >
 										<input type="hidden" name="post-id" value="{{ post.id }}">
 											<button type="submit" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03" style="text-align:left;">
 													{{ post.title|safe }}
@@ -369,14 +377,13 @@
 							<h5 class="f1-m-5 cl0 p-b-10">
 								Обуна
 							</h5>
-
+						
 							<p class="f1-s-1 cl0 p-b-25">
 								Кайноқ янгиликларга обуна бўлинг
 							</p>
-
 						
-
-							<form class="size-a-9 pos-relative" action="{% url 'action_view'%}">
+						
+							<form class="size-a-9 pos-relative" action="{% url 'action_view' %}"  method="post">
 								<input type="hidden" name='action' value="create_email" >
 									{% csrf_token %}
 								<input class="s-full f1-m-6 cl6 plh9 p-l-20 p-r-55" type="email" name="email" placeholder="Email">

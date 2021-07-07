@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor_uploader.fields import RichTextUploadingField
 from .choices import POST_CHOICES
+from taggit.managers import TaggableManager
 # Create your models here.
 
 class IpModel(models.Model):
@@ -46,6 +47,7 @@ class Posts(models.Model):
                                     auto_now_add=True)
     tags = models.ManyToManyField('Tag',
                                   verbose_name='Tag', blank=True)
+    tags_new = TaggableManager()
     post_type = models.CharField(verbose_name="Post Turi", choices=POST_CHOICES, max_length=10 ,default='Default', null=True, blank=True)
     
     

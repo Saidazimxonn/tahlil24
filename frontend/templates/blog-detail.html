@@ -61,10 +61,9 @@
 								</span>
 							 
 								<div class="flex-wr-s-s size-w-0">
-								{% for tag in blog.tags.all %}
-									<a href="#" class="f1-s-12 cl8 hov-link1 m-r-15">
-									{{ tag }} 
-									</a>
+								{% for tag in blog.tags_new.all %}
+								<a href="{% url 'posts_by_tag' tag.slug %}" class="f1-s-12 cl8 hov-link1 m-r-15">
+								{{ tag.name }}</a>
 								{% endfor %}
 								
 								</div>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.http import request
-from .models import Category, Tag, Posts, Author, IpModel
+from .models import Category, Tag, Posts, Author, IpModel, Email
 from django import forms
 # Register your models here.
 
@@ -32,7 +32,8 @@ class CategoryAdmin(admin.ModelAdmin):
     
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    pass
+   list_display = ['id', 'title']
+   list_display_links = ['id', 'title']
 
 
 @admin.register(Posts)
@@ -70,4 +71,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 @admin.register(IpModel)
 class IpModelAdmin(admin.ModelAdmin):
+    pass
+@admin.register(Email)
+class EmailAdmin(admin.ModelAdmin):
     pass

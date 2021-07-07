@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'active_link',
     'ckeditor',
     'ckeditor_uploader',
+    'contac_us',
+    'widget_tweaks',
+    'taggit',
 
 ]
 

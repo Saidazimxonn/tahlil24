@@ -35,15 +35,15 @@
 			<div class="topbar">
 				<div class="content-topbar container h-100">
 					<div class="left-topbar">
-						<a href="#" class="left-topbar-item">
+						<a href="{% url 'about-site' %}" class="left-topbar-item">
 							Сайт ҳақида
 						</a>
 
-						<a href="#" class="left-topbar-item">
+						<a href="{% url 'contact' %}" class="left-topbar-item">
 							Алоқа
 						</a>
 
-						<a href="#" class="left-topbar-item">
+						<a href="{% url 'ad' %}" class="left-topbar-item">
 							Реклама
 						</a>
 					</div>
@@ -90,7 +90,7 @@
 							Сайт ҳақида
 						</a>
 
-						<a href="#" class="left-topbar-item">
+						<a href="{% url 'contact' %}" class="left-topbar-item">
 							Алоқа
 						</a>
 
@@ -116,7 +116,7 @@
 						</a>
 					</li>
 				</ul>
-
+					{% include 'messages.html' %}
 				<ul class="main-menu-m">
                     {% with url_name=request.reslover_match.url_name %}
 							<li class="main-menu-active">

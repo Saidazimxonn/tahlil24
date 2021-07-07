@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block content %}
+<body class="animsition">
+
+
+
+	<!-- Page heading -->
+	<div class="container p-t-4 p-b-40">
+	
+
+		</h2>
+	</div>
+		
+	<!-- Post -->
+	<section class="bg0 p-t-70 p-b-55">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-10 col-lg-8 p-b-80">
+					<div class="row">
+						
+						{% for tag in tags %}
+						<div class="col-sm-6 p-r-25 p-r-15-sr991">
+							<!-- Item latest -->	
+							<div class="m-b-45">
+								<form action="{% url 'blog_detail' tag.id %}" method="get" >
+									<input type="hidden" name="post-id" value="{{ tag.id }}">
+									<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="{{ tag.image.url }}" alt="IMG"></button>
+								</form>
+							
+
+								<div class="p-t-16">
+									<h5 class="p-b-5">
+										<form action="{% url 'blog_detail' tag.id %}" method="get" >
+											<input type="hidden" name="post-id" value="{{ tag.id }}">
+												<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+														{{ tag.title|safe }}
+												</button>
+										</form>
+									
+									</h5>
+
+									<span class="cl8">
+										<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+											Автор: {{tag.user.last_name}} {{tag.user.first_name}} 
+										</a>
+
+										<span class="f1-s-3 m-rl-3">
+											-
+										</span>
+
+										<span class="f1-s-3">
+											{{tag.add_time|date:'M d'}}
+										</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					
+				
+					</div>
+
+					<!-- Pagination -->
+					<a href="#" class="flex-c-c size-a-13 bo-all-1 bocl11 f1-m-6 cl6 hov-btn1 trans-03">
+							Кўпроқ
+					</a>
+				</div>
+
+				<div class="col-md-10 col-lg-4 p-b-80">
+					<div class="p-l-10 p-rl-0-sr991">							
+						<!-- Subscribe -->
+						<!-- <div class="bg10 p-rl-35 p-t-28 p-b-35 m-b-50">
+							<h5 class="f1-m-5 cl0 p-b-10">
+								Обуна
+							</h5>
+
+							<p class="f1-s-1 cl0 p-b-25">
+								Кайноқ янгиликларга обуна бўлинг
+							</p>
+
+							<form class="size-a-9 pos-relative">
+								<input class="s-full f1-m-6 cl6 plh9 p-l-20 p-r-55" type="text" name="email" placeholder="Email">
+
+								<button class="size-a-10 flex-c-c ab-t-r fs-16 cl9 hov-cl10 trans-03">
+									<i class="fa fa-arrow-right"></i>
+								</button>
+							</form>
+						</div> -->
+
+						<!-- Most Popular -->
+						<div class="p-b-23">
+							<div class="how2 how2-cl4 flex-s-c">
+								<h3 class="f1-m-2 cl3 tab01-title">
+									Оммабоп
+								</h3>
+							</div>
+
+							<ul class="p-t-35">
+								{% for post in actual %}
+								<li class="flex-wr-sb-s p-b-22">
+									<form action="{% url 'blog_detail' post.id %}" method="get" >
+										<input type="hidden" name="post-id" value="{{ post.id }}">
+											<button type="submit" class="size-w-3 f1-s-7 cl3 hov-cl10 trans-03" style="text-align:left;">
+													{{ post.title|safe }}
+											</button>
+									</form>
+								</li>
+								{% endfor %}
+							
+							</ul>
+						</div>
+
+						<!--  -->
+						<div class="flex-c-s p-b-50">
+							<a href="#">
+								<img class="max-w-full" src="images/banner-02.jpg" alt="IMG">
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	{% endblock content %}

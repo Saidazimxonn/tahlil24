@@ -1,10 +1,15 @@
-from django.shortcuts import render
-from .models import Category, IpModel, Tag, Posts, Author
+from .models import  IpModel, Posts, Author
 from django.views.generic import TemplateView, ListView, DetailView, View
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from .helpers import create_email
+from django.contrib import messages
+from taggit.models import Tag
 # Create your views here.
-
+class TagMixin(object):
+    def get_context_data(self, **kwargs):
+        context = super(TagMixin, self).get_context_data(**kwargs)
+        context['tags'] = Tag.objects.all()
+        return context
 class PostView(ListView):
     model = Posts
     template_name = 'index.html'
@@ -123,5 +128,36 @@ class ActionView(View):
             'create_email' : create_email,
             
         }
+        
         actions[self.request.POST.get('action', None)](post_request)
+        messages.success(self.request, "Email Юборилди биз билан бўлганингиз учун ташаккур")
         return redirect('/')
+    
+class PostJsonView(View):
+    
+    def get(self, *args, **kwargs):
+        pass
+class AboutWebSite(TemplateView):
+    template_name = 'about.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(AboutWebSite, self).get_context_data(**kwargs)
+        actual_post = Posts.objects.all().order_by('-views_post')[0:5]
+        context['actual'] = actual_post
+        return context
+    
+
+class TagsView(ListView):
+    model = Posts
+    template_name = 'tags_category.html'
+    context_object_name = 'tags'
+    def get_context_data(self, **kwargs):
+        context = super(TagsView, self).get_context_data(**kwargs)
+        tags = Posts.objects.all()
+        actual_post = Posts.objects.all().order_by('-views_post')[0:5]
+        context['actual'] = actual_post
+        return context
+    
+    def get_queryset(self):
+        return Posts.objects.filter(tags_new__slug=self.kwargs.get('tag_slug'))
+        

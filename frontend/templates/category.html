@@ -44,16 +44,8 @@
 									</h5>
 
 									<span class="cl8">
-										<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-											Автор: {{category.user.last_name}} {{category.user.first_name}} 
-										</a>
-
-										<span class="f1-s-3 m-rl-3">
-											-
-										</span>
-
 										<span class="f1-s-3">
-											{{category.add_time|date:'M d'}}
+											<i class="far fa-calendar-check "></i>&nbsp;{{category.add_time|date:'Y-m-d'}}
 										</span>
 									</span>
 								</div>
@@ -63,6 +55,7 @@
 					
 				
 					</div>
+					
 					{% if filter_category.count >= 2 %}
 					<!-- Pagination -->
 				<p class="flex-c-c size-a-13 bo-all-1 bocl11 f1-m-6 cl6 hov-btn1 trans-03" id="load-more"   ><button>Кўпроқ</button> </p>
@@ -153,6 +146,7 @@
 				data:data,
 				url:'{% url "load-more-posts" %}',
 				success:function(data){
+				
 					let post_data = data['data']
 					let posts_template = ``;
 					for(post_index in post_data) {
@@ -185,16 +179,12 @@
 										</h5>
 
 										<span class="cl8">
-											<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-												Автор:  	${post_data[post_index]['user.first_name']}
-											</a>
-
-											<span class="f1-s-3 m-rl-3">
-												-
-											</span>
+										
 
 											<span class="f1-s-3">
-												${post_data[post_index]['add_time']}
+												<i class="far fa-calendar-check "></i>&nbsp;${post_data[post_index]['add_time']}
+											
+
 											</span>
 										</span>
 									</div>

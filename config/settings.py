@@ -130,7 +130,7 @@ STATIC_URL = '/static/'
 
 # STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static_dev') ,
+    os.path.join(BASE_DIR,'static') ,
          )
 
 
@@ -144,9 +144,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+
 CKEDITOR_CONFIGS = {
     'default': {
-        'skin': 'moono',
+        # 'skin': 'moono',
         # 'skin': 'office2013',
         'toolbar_Basic': [
             ['Source', '-', 'Bold', 'Italic']
@@ -178,7 +179,7 @@ CKEDITOR_CONFIGS = {
                 # put the name of your editor.ui.addButton here
                 'Preview',
                 'Maximize',
-
+                'Youtube'
             ]},
         ],
         'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
@@ -204,14 +205,8 @@ CKEDITOR_CONFIGS = {
             'clipboard',
             'dialog',
             'dialogui',
-            'elementspath'
+            'elementspath',
+            'youtube'
         ]),
-        'default': {
-        'toolbar': 'full',
-        'height': "500px",
-        'width': "100%",
-        # Just
-        'contentsCss': 'img {max-width: 100%;height: auto! important;}',
-    },
     }
 }

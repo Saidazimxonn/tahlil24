@@ -42,15 +42,13 @@
 
 											<span class="cl8">
 												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-													{{posts.first.category}}
+													{{posts.first.category}}&nbsp;&nbsp;
 												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
 												<span class="f1-s-3">
-													{{posts.first.add_time|date:'M d'}}
+													<i class="far fa-calendar-check "></i>&nbsp;{{posts.first.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
+												</span>
+												<span class="f1-s-3">
+												<i class="far fa-clock"></i>&nbsp;{{posts.first.time_post}}
 												</span>
 											</span>
 
@@ -86,17 +84,14 @@
 											</h5>
 
 											<span class="cl8">
-												<a href=" " class="f1-s-6 cl8 hov-cl10 trans-03">
-													{{post.category}}
-													{{post.user.author}}
+												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+													{{posts.first.category}}&nbsp;&nbsp;
 												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
 												<span class="f1-s-3">
-													{{post.add_time|date:'M d'}}
+													<i class="far fa-calendar-check "></i>&nbsp;{{posts.first.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
+												</span>
+												<span class="f1-s-3">
+												<i class="far fa-clock"></i>&nbsp;{{posts.first.time_post}}
 												</span>
 											</span>
 										</div>
@@ -145,20 +140,15 @@
 										
 											</h5>
 
+								
 											<span class="cl8">
 												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-													{{current1.category}}
-
+													{{posts.first.category}}&nbsp;&nbsp;
 												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
 												<span class="f1-s-3">
-													{{current1.add_time|date:'M d'}}
-
+													<i class="far fa-calendar-check "></i>&nbsp;{{posts.first.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
 												</span>
+											
 											</span>
 
 											<p class="f1-s-1 cl6 p-t-18">
@@ -195,17 +185,13 @@
 											</h5>
 
 											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													{{post.category}}
+												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+													{{posts.first.category}}&nbsp;&nbsp;
 												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
 												<span class="f1-s-3">
-													{{post.add_time|date:'M d'}}
+													<i class="far fa-calendar-check "></i>&nbsp;{{posts.first.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
 												</span>
+											
 											</span>
 										</div>
 									</div>
@@ -254,19 +240,14 @@
 												</form>
 										
 											</h5>
-
 											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													{{post.category}}
+												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+													{{posts.first.category}}&nbsp;&nbsp;
 												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
 												<span class="f1-s-3">
-													{{post.add_time|date:'M d'}}
+													<i class="far fa-calendar-check "></i>&nbsp;{{posts.first.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
 												</span>
+											
 											</span>
 										</div>
 									</div>
@@ -314,19 +295,14 @@
 														</button>
 												</form>
 											</h5>
-
 											<span class="cl8">
-												<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-													{{post.category}}
+												<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+													{{posts.first.category}}&nbsp;&nbsp;
 												</a>
-
-												<span class="f1-s-3 m-rl-3">
-													-
-												</span>
-
 												<span class="f1-s-3">
-													{{post.add_time|date:'M d'}}
+													<i class="far fa-calendar-check "></i>&nbsp;{{posts.first.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
 												</span>
+											
 											</span>
 										</div>
 									</div>
@@ -442,18 +418,15 @@
 								</form>
 								
 							</h5>
-
 							<span class="cl8">
 								<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-									Автор: {{post.user.first_name}} {{post.user.last_name}}
+									{{post.category}}&nbsp;&nbsp;
 								</a>
-
-								<span class="f1-s-3 m-rl-3">
-									-
-								</span>
-
 								<span class="f1-s-3">
-									июнь 26
+									<i class="far fa-calendar-check "></i>&nbsp;{{post.add_time|date:'Y-m-d'}}&nbsp;&nbsp;
+								</span>
+								<span class="f1-s-3">
+								<i class="far fa-clock"></i>&nbsp;{{post.time_post}}
 								</span>
 							</span>
 						</div>
@@ -465,3 +438,12 @@
 		</div>
 	</section>
 {% endblock content %}
+
+
+{% if number == 1 %}
+Долзарб ҳабарлар
+{% elif number == 2 %}
+Фото Хабарлар
+{% elif number == 3 %}
+Видео Хабарлар
+{% endif %}

@@ -40,16 +40,11 @@
 									</h5>
 
 									<span class="cl8">
-										<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
-											Автор: {{tag.user.last_name}} {{tag.user.first_name}} 
-										</a>
-
-										<span class="f1-s-3 m-rl-3">
-											-
-										</span>
-
-										<span class="f1-s-3">
-											{{tag.add_time|date:'M d'}}
+								
+										<span class="cl8">
+											<span class="f1-s-3">
+												<i class="far fa-calendar-check "></i>&nbsp;{{tag.add_time|date:'Y-m-d'}}
+											</span>
 										</span>
 									</span>
 								</div>
@@ -60,10 +55,22 @@
 				
 					</div>
 
-					<!-- Pagination -->
-					<a href="#" class="flex-c-c size-a-13 bo-all-1 bocl11 f1-m-6 cl6 hov-btn1 trans-03">
-							Кўпроқ
-					</a>
+				
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+					{%if tags.has_previous %} {# whether the previous page exists #}
+				<li class="page-item">	<a class="page-link" href="?page={{tags.previous_page_number}}"><i class="fas fa-chevron-left"></i></a> </li>{# link to the prev page #}
+				{% endif %}
+				<li class="page-item"><span class="page-link">{{tags.number}}</span> </li>{# the current page number #}
+				
+				{%if tags.has_next %} {# whether the next page exists #}
+				<li class="page-item">	<a  class="page-link"href="?page={{tags.next_page_number}}"><i class="fas fa-chevron-right"></i></a></li> {# link to the next page #}
+				{% endif %}
+</ul>
+					</nav>
+			
+					
+
 				</div>
 
 				<div class="col-md-10 col-lg-4 p-b-80">

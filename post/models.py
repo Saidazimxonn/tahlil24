@@ -43,10 +43,10 @@ class Posts(models.Model):
     
     content = RichTextUploadingField(verbose_name='Xabar')
     views_post = models.ManyToManyField(IpModel, related_name='post_view', blank=True)  
-    add_time = models.DateTimeField(verbose_name='Add post',
+    
+    add_time = models.DateField(verbose_name='Add post',
                                     auto_now_add=True)
-    tags = models.ManyToManyField('Tag',
-                                  verbose_name='Tag', blank=True)
+    time_post = models.TimeField(auto_now_add=True)
     tags_new = TaggableManager()
     post_type = models.CharField(verbose_name="Post Turi", choices=POST_CHOICES, max_length=10 ,default='Default', null=True, blank=True)
     
@@ -67,7 +67,7 @@ class Posts(models.Model):
     
     
 class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     full_name = models.CharField(verbose_name='Full name', max_length=255)
     allowed_models = models.ManyToManyField(Category)
     image = models.ImageField()

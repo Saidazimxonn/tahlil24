@@ -5,12 +5,19 @@ from .helpers import create_email
 from django.contrib import messages
 from taggit.models import Tag
 from django.http import JsonResponse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.shortcuts import render
+from django.db.models import Q
 # Create your views here.
-class TagMixin(object):
-    def get_context_data(self, **kwargs):
-        context = super(TagMixin, self).get_context_data(**kwargs)
-        context['tags'] = Tag.objects.all()
-        return context
+
+# class TagMixin(object):
+#     def get_context_data(self, **kwargs):
+#         context = super(TagMixin, self).get_context_data(**kwargs)
+#         context['tags'] = Tag.objects.all()
+#         return context
+    
+    
+#ListView 
 class PostView(ListView):
     model = Posts
     template_name = 'index.html'
@@ -45,6 +52,7 @@ class PostView(ListView):
         
         return context
     
+    
 class CategoryVeiw(TemplateView):
     template_name = 'category.html'
     
@@ -52,12 +60,13 @@ class CategoryVeiw(TemplateView):
         id_c = self.kwargs['pk']
         actual_post = Posts.objects.all().order_by('-views_post')[0:5]
         context = super(CategoryVeiw, self).get_context_data(**kwargs)
-        print(Posts.objects.filter(category__id=id_c).values('id'))
         filter_category = Posts.objects.filter(category__id=id_c).order_by('id')[:2]
         context['actual'] = actual_post
         context['filter_category'] = filter_category
         context['category_id'] = id_c
         return context
+    
+    
 class DynamicPostsLoad(View):
     
     @staticmethod
@@ -66,8 +75,7 @@ class DynamicPostsLoad(View):
         category_id = request.GET.get('categoryId')
         print(last_post_id)
         more_posts = Posts.objects.order_by('id').filter(pk__gt=int(last_post_id), category_id=category_id)\
-            .values('id', 'user', 'category', 'title', 'image', 'content_mini', 
-                    'content',  'add_time', 'post_type' )[:2]
+            .values('id','title', 'image', 'content_mini', 'add_time' )[:2]
       
         if not more_posts:
             return JsonResponse({'data':False})
@@ -78,41 +86,83 @@ class DynamicPostsLoad(View):
             print(post['id'])
             obj = {
                 'id':post['id'],
-                'user':post['user'],
-                'category':post['category'],
                 'title':post['title'],
                 'image':post['image'],
                 'content_mini':post['content_mini'],
-                'content':post['content'],
                 'add_time':post['add_time'],
-                'post_type':post['post_type'],
+             
                 }
             data.append(obj)
         data[-1]['last_post'] = True
         return JsonResponse({'data':data})
-class CategoryPostVeiw(TemplateView):
+    
+    
+    
+    
+    
+class CategoryPostVeiw(ListView):
+    model=Posts
     template_name = 'post_category.html'
-  
+    paginate_by = 2
     
     def get_context_data(self, **kwargs):
-        id_c = self.kwargs['pk']
+            id_c = self.kwargs['pk']
+            context = super(CategoryPostVeiw, self).get_context_data(**kwargs)
+            actual_post = Posts.objects.all().order_by('-views_post')[0:5]
+            post_category = Posts.objects.all()      
+            
+            if int(id_c) == int(1):
+                post_category = Posts.objects.filter(post_type='ACT')
+            if int(id_c) == int(2):
+                post_category = Posts.objects.filter(post_type='IMG')
+            if int(id_c) == int(3):
+                post_category = Posts.objects.filter(post_type='VED')  
+            filter_post = post_category
+            p= Paginator(filter_post,2)  # 3 posts in each page
+            page_number = self.request.GET.get('page')
+            try:
+                page_obj = p.get_page(page_number)  # returns the desired page object
+            except PageNotAnInteger:
+                # if page_number is not an integer then assign the first page
+                page_obj = p.page(1)
+            except EmptyPage:
+                # if page is empty then return last page
+                page_obj = p.page(p.num_pages)
+            context['number'] = id_c
+            context['actual'] = actual_post
+            context['page_obj'] = page_obj
+            
+            return context
+        
+class TagsView(ListView):
+    model = Posts
+    template_name = 'tags_category.html'
     
-        context = super(CategoryPostVeiw, self).get_context_data(**kwargs)
+ 
+    def get_context_data(self, **kwargs):
+        context = super(TagsView, self).get_context_data(**kwargs)
+        tags = Posts.objects.all()
+        filter_post=Posts.objects.filter(tags_new__slug=self.kwargs.get('tag_slug'))
         actual_post = Posts.objects.all().order_by('-views_post')[0:5]
-        post_category = Posts.objects.all()        
-        if int(id_c) == int(1):
-            post_category = Posts.objects.filter(post_type='ACT')
-        if int(id_c) == int(2):
-            post_category = Posts.objects.filter(post_type='IMG')
-        if int(id_c) == int(3):
-            post_category = Posts.objects.filter(post_type='VED')
-        filter_post = post_category
-        context['number'] = id_c
+        p= Paginator(filter_post,3)  # 3 posts in each page
+        page_number = self.request.GET.get('page')
+        try:
+                page_obj = p.get_page(page_number)  # returns the desired page object
+        except PageNotAnInteger:
+                # if page_number is not an integer then assign the first page
+                page_obj = p.page(1)
+        except EmptyPage:
+             page_obj = p.page(p.num_pages)
+             
+        page_filter=page_obj
         context['actual'] = actual_post
-        context['post_category'] = filter_post
+        context['tags'] = page_filter
         
         return context
+
+        
  
+# Ip idress New client
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -122,6 +172,8 @@ def get_client_ip(request):
     return ip
 
 
+       
+       
         
 class PostDetail(DetailView):
     model = Posts
@@ -150,6 +202,8 @@ class PostDetail(DetailView):
             blog = Posts.objects.get(pk=post_id)
             blog.views_post.add(IpModel.objects.get(ip=ip))
         return self.render_to_response(context)
+        
+        
             
 class ActionView(View):
     
@@ -166,10 +220,9 @@ class ActionView(View):
         messages.success(self.request, "Email Юборилди биз билан бўлганингиз учун ташаккур")
         return redirect('/')
     
-class PostJsonView(View):
     
-    def get(self, *args, **kwargs):
-        pass
+
+    
 class AboutWebSite(TemplateView):
     template_name = 'about.html'
     
@@ -180,17 +233,30 @@ class AboutWebSite(TemplateView):
         return context
     
 
-class TagsView(ListView):
-    model = Posts
-    template_name = 'tags_category.html'
-    context_object_name = 'tags'
-    def get_context_data(self, **kwargs):
-        context = super(TagsView, self).get_context_data(**kwargs)
-        tags = Posts.objects.all()
-        actual_post = Posts.objects.all().order_by('-views_post')[0:5]
-        context['actual'] = actual_post
-        return context
+
+
+class SearchView(View):
     
-    def get_queryset(self):
-        return Posts.objects.filter(tags_new__slug=self.kwargs.get('tag_slug'))
+    
+    def get(self, request):
         
+        search_val = request.GET.get('search_val', 'all')
+        elements = Posts.objects.all().in_bulk()
+      
+        if search_val !='all':
+            elements = Posts.objects.filter(Q(title__icontains=search_val)|Q(content_mini__icontains=search_val)|Q(content__icontains=search_val)).in_bulk()
+        posts = list()
+        for post in elements.values():
+            post_temp = dict(post.__dict__)
+            post_temp['category'] = post.category.title
+            try:
+                post_temp.__delitem__('_state')
+            except:
+                pass
+            posts.append(post_temp)
+        data= {
+                'posts':posts
+            }
+            
+        return JsonResponse({'data':data})
+         

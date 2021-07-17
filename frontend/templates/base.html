@@ -71,7 +71,7 @@
 			<div class="wrap-header-mobile">
 				<!-- Logo moblie -->		
 				<div class="logo-mobile">
-					<a href="index.html"><img src="{% static 'images/icons/logo-01.png' %}" alt="IMG-LOGO"></a>
+					<a href="/"><img src="{% static 'images/icons/logo-01.png' %}" alt="IMG-LOGO"></a>
 				</div>
 
 				<!-- Button show menu -->
@@ -86,7 +86,7 @@
 			<div class="menu-mobile">
 				<ul class="topbar-mobile">
 					<li class="left-topbar">
-						<a href="#" class="left-topbar-item">
+						<a href="{% url 'about-site' %}" class="left-topbar-item">
 							Сайт ҳақида
 						</a>
 
@@ -94,7 +94,7 @@
 							Алоқа
 						</a>
 
-						<a href="#" class="left-topbar-item">
+						<a href="{% url 'ad' %}" class="left-topbar-item">
 							Реклама
 						</a>
 					</li>
@@ -155,8 +155,8 @@
 
 				<!-- Search -->
 				<div class="pos-relative size-a-2 bo-1-rad-22 of-hidden bocl11 m-tb-6">
-					<input class="f1-s-1 cl6 plh9 s-full p-l-25 p-r-45" type="text" name="search" placeholder="Излаш">
-						<button class="flex-c-c size-a-1 ab-t-r fs-20 cl2 hov-cl10 trans-03">
+					<input class="f1-s-1 cl6 plh9 s-full p-l-25 p-r-45" id="searchVAL"  placeholder="Излаш">
+						<button class="flex-c-c size-a-1 ab-t-r fs-20 cl2 hov-cl10 trans-03" onclick="getValueSearch()" type="button">
 						<i class="zmdi zmdi-search"></i>
 						</button>
 				</div>
@@ -227,8 +227,15 @@
 			</a>
 		</div>
 	</div>
+
+
+<ul class="" id="SerachTEMP">
 {% block content %}
+
+
 {% endblock content %}
+					</ul>
+
 	<!-- Footer -->
 	<footer>
 		<div class="bg2 p-t-40 p-b-25">
@@ -297,7 +304,7 @@
 		</div>
 	</div>
  -->
-
+ <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <!--===============================================================================================-->	
 	<script src="{% static 'vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <!--===============================================================================================-->
@@ -309,8 +316,65 @@
 	<script src="{% static 'js/main.js' %}"></script>
 	
 	<!--Script Date -->.
-	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<script>
+
+function getValueSearch(){
+	let search_val = $("#searchVAL").val()
+	
+	data = {
+		'search_val':search_val,
+	}
+	$.ajax({
+		method:'GET',
+		dataType:'json',
+		data:data,
+		url:'{% url "search_view" %}',
+		success: function(data){
+			searchs = data['data']['posts']
+			search_elements = ``
+			for(let post in searchs){
+				search_templates = `
+				<div class="col-sm-6 category p-r-25 p-r-15-sr991">
+				<div class="m-b-45">
+					<form action="/blog_detail/${searchs[post]['id']}/" method="get" >
+						<input type="hidden" name="post-id" value="${searchs[post]['id']}">
+						<button class="wrap-pic-w hov1 trans-03" type="submit"><img src="/media/${searchs[post]['image']}" alt="IMG"></button>
+					</form>
+				
+
+					<div class="p-t-16">
+						<h5 class="p-b-5">
+							<form action="/blog_detail/${searchs[post]['id']}/" method="get" >
+								<input type="hidden" name="post-id" value="${searchs[post]['id']}">
+									<button type="submit" class="f1-m-3 cl2 hov-cl10 trans-03" style="text-align:left;">
+										${searchs[post]['title']}
+									</button>
+							</form>
+					
+						</h5>
+
+						<span class="cl8">
+						
+
+							<span class="f1-s-3">
+								<i class="far fa-calendar-check "></i>&nbsp;${searchs[post]['add_time']}
+							
+
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>`
+
+			search_elements +=search_templates
+		}
+		$('#SerachTEMP').html(search_elements)
+		}
+	})
+}
+	</script>
 	{% block extra_js %}
 	{% endblock extra_js %}
 </body>
+
 </html>

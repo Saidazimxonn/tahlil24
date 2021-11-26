@@ -4,7 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from .choices import POST_CHOICES
 from taggit.managers import TaggableManager
 # Create your models here.
-
+#salom
 class IpModel(models.Model):
     ip = models.CharField(max_length=100)
     
